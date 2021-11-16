@@ -29,7 +29,7 @@ void SERIAL_PORT_GPIO_Init(void);
 void SERIAL_PORT_UART_Init(void);
 void serial_port_println(char *data);
 void serial_port_print(char *data);
-void serial_port_write_int(uint32_t num);
+void serial_port_write_int(int32_t num);
 void test_serial_port(void);
 
 #endif /* SERIAL_PORT_SERIAL_PORT_H_ */

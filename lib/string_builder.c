@@ -9,9 +9,11 @@
 
 string_builder_t str_builder;
 
-void string_builder_init(string_builder_t *builder)
+void string_builder_init(void)
 {
 	clear();
+	str_builder.size = 0;
+	str_builder.res_size = 0;
 	str_builder.prepend_char = &prepend_char;
 	str_builder.append_char = &append_char;
 	str_builder.append_str = &append_str;
@@ -19,23 +21,17 @@ void string_builder_init(string_builder_t *builder)
 	str_builder.clear = &clear;
 	str_builder.clear_res = &clear_res;
 	str_builder.int_to_string = &int_to_string;
-
-	//str_builder = *builder;
 }
 
 void prepend_char(char c) {
-	char *old_str = str_builder.res;
-	char *new_str = (char *)malloc(sizeof(char) * (str_builder.res_size + 1));
-	new_str[0] = c;
-	int i = 1;
-	for (;i < str_builder.res_size + 1; i++) new_str[i] = str_builder.res[i -1];
-	new_str[i] = '\0';
+	int i = str_builder.res_size;
+	while(i > 0) {
+		*(str_builder.res + i) = *(str_builder.res + (i - 1));
+		i -= 1;
+	}
+	*(str_builder.res) = c;
 	// update size
 	str_builder.res_size += 1;
-	// update str
-	str_builder.res = new_str;
-	// free old_str
-	free(old_str);
 }
 
 void append_char(char c)
@@ -70,7 +66,7 @@ char char_at(uint16_t index)
 	return '\0';
 }
 
-char int_to_char(uint32_t n) {
+char digit_to_char(uint32_t n) {
 	switch(n) {
 		case 0: return '0'; break;
 		case 1: return '1'; break;
@@ -86,13 +82,26 @@ char int_to_char(uint32_t n) {
 	}
 }
 
-void int_to_string(uint32_t n) {
+void int_to_string(int32_t n) {
 	str_builder.clear_res();
-	while(n != 0) {
-		uint32_t num = n % 10;
-		str_builder.prepend_char(int_to_char(num));
-		n /= 10;
+	uint8_t neg_flag = 0;
+	if (n < 0) {
+		neg_flag = 1;
+	    n = n * -1;
 	}
+	else if (n == 0) {
+		str_builder.prepend_char(digit_to_char(n));
+	}
+	else {
+		while(n != 0) {
+
+		uint32_t num = n % 10;
+		str_builder.prepend_char(digit_to_char(num));
+		n /= 10;
+		}
+	}
+	if(neg_flag)
+		str_builder.prepend_char('-');
 }
 
 void clear(void)
@@ -104,6 +113,5 @@ void clear(void)
 void clear_res(void)
 {
 	str_builder.res_size = 0;
-	str_builder.res = (char *)malloc(sizeof(char) * 0);
-	*str_builder.res = '\0';
+	for (int i = 0; i < 16; i++) *(str_builder.res + i) = '\0';
 }

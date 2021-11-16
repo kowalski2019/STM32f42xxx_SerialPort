@@ -1,3 +1,4 @@
+
 /**
   ******************************************************************************
   * @file    	serial_port.c
@@ -14,7 +15,6 @@
 #include <string.h>
 #include "lib/string_builder.h"
 
-string_builder_t str_builder;
 
 void SERIAL_PORT_GPIO_Init(void)
 {
@@ -54,7 +54,7 @@ void SERIAL_PORT_Init(void)
 {
 	SERIAL_PORT_GPIO_Init();
 	SERIAL_PORT_UART_Init();
-	string_builder_init(&str_builder);
+	string_builder_init();
 }
 
 /**
@@ -70,7 +70,7 @@ void serial_port_println(char *data)
 /**
  *
  */
-void serial_port_write_int(uint32_t num) {
+void serial_port_write_int(int32_t num) {
 	str_builder.int_to_string(num);
 	serial_port_print(str_builder.res);
 }
@@ -86,7 +86,7 @@ void test_serial_port(void)
 
 	while(1)
 	{
-		serial_port_println("Hello world :)");
+		serial_port_print("Hello world");
 		serial_port_println("");
 		HAL_Delay(1000);
 	}
