@@ -15,8 +15,10 @@
 #include <string.h>
 #include "lib/string_builder.h"
 
+static UART_HandleTypeDef uart1;
+static GPIO_InitTypeDef gpio_init_struct;
 
-void SERIAL_PORT_GPIO_Init(void)
+static void SERIAL_PORT_GPIO_Init(void)
 {
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 
@@ -31,7 +33,7 @@ void SERIAL_PORT_GPIO_Init(void)
 }
 
 
-void SERIAL_PORT_UART_Init(void)
+static void SERIAL_PORT_UART_Init(void)
 {
 	__HAL_RCC_USART1_CLK_ENABLE();
 

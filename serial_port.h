@@ -19,14 +19,8 @@
 #define UART_RX_PIN GPIO_PIN_10
 
 
-/*UART structure */
-UART_HandleTypeDef uart1;
-GPIO_InitTypeDef gpio_init_struct;
-
 /* --- Public functions (prototypes) */
 void SERIAL_PORT_Init(void);
-void SERIAL_PORT_GPIO_Init(void);
-void SERIAL_PORT_UART_Init(void);
 void serial_port_println(char *data);
 void serial_port_print(char *data);
 void serial_port_write_int(int32_t num);
