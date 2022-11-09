@@ -7,7 +7,7 @@ The first step is of course to initialise the device by calling the function **S
 
 To see the values that are sent via SPI to the **VCP** (**V**irtual **C**OM **P**ort)
 you kann use **PuTTY** on Windows and **screen** on Linux.
-PuTTY is also available on Linux ;-) .
+PuTTY is also available on Linux :wink: .
 ### Unix/Linux OS
 You simply have to enter the command ``` screen ttyACMx 115200 ```.
 The x must be replaced here, as the port connections are dependent on the computer.
