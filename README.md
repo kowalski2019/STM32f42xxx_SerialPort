@@ -2,7 +2,10 @@
 
 ## How to use it ?
 
-To see the values that are sent via the VCP (**V**irtual **C**OM **P**ort)
+
+The first step is of course to initialise the device by calling the function **SERIAL_PORT_Init()**. After this step you can of course move on to a possible visualisation.
+
+To see the values that are sent via SPI to the **VCP** (**V**irtual **C**OM **P**ort)
 you kann use **PuTTY** on Windows and **screen** on Linux.
 PuTTY is also available on Linux ;-) .
 ### Unix/Linux OS
