@@ -1,13 +1,13 @@
 
 /**
-  ******************************************************************************
-  * @file    	serial_port.c
-  * @author		Claude Stephane M. Kouame
-  * @version 	V1.0
-  * @date		15.07.2021
-  * @brief  	Module for using the UART/USART on the waveshare-board.
-  ******************************************************************************
-*/
+ ******************************************************************************
+ * @file    	serial_port.c
+ * @author		Claude Stephane M. Kouame; claude.kouame@csmk59.de
+ * @version 	V1.0
+ * @date		2021.7.15
+ * @brief  	Module for using the UART/USART on the waveshare-board.
+ ******************************************************************************
+ */
 
 /* Includes */
 
@@ -29,9 +29,7 @@ static void SERIAL_PORT_GPIO_Init(void)
 	gpio_init_struct.Alternate = GPIO_AF7_USART1;
 
 	HAL_GPIO_Init(GPIOA, &gpio_init_struct);
-
 }
-
 
 static void SERIAL_PORT_UART_Init(void)
 {
@@ -72,7 +70,8 @@ void serial_port_println(char *data)
 /**
  *
  */
-void serial_port_write_int(int32_t num) {
+void serial_port_write_int(int32_t num)
+{
 	str_builder.int_to_string(num);
 	serial_port_print(str_builder.res);
 }
@@ -86,7 +85,7 @@ void test_serial_port(void)
 {
 	SERIAL_PORT_Init();
 
-	while(1)
+	while (1)
 	{
 		serial_port_print("Hello world");
 		serial_port_println("");
