@@ -14,6 +14,8 @@ void string_builder_init(void)
 	clear();
 	str_builder.size = 0;
 	str_builder.res_size = 0;
+	str_builder.str = (char *) malloc(sizeof(char) * STR_DEFAULT_SIZE);
+	str_builder.capacity = STR_DEFAULT_SIZE;
 	str_builder.prepend_char = &prepend_char;
 	str_builder.append_char = &append_char;
 	str_builder.append_str = &append_str;
@@ -36,24 +38,32 @@ void prepend_char(char c) {
 
 void append_char(char c)
 {
-	char *old_str = str_builder.str;
-	char *new_str = (char *)malloc(sizeof(char) * (str_builder.size + 1));
-	int i = 0;
-	for (;i < str_builder.size; i++) new_str[i] = str_builder.str[i];
-	new_str[i++] = c;
-	new_str[i] = '\0';
+
+	if(str_builder.size + 1 >= str_builder.capacity) {
+		char *to_free = str_builder.str;
+		// increase str capacity
+		uint64_t new_capacity = str_builder.capacity * str_builder.capacity;
+		char *new_str = (char *) malloc(sizeof(char) * new_capacity);
+		// TODO check malloc result!
+		for (int i = 0; i < str_builder.size; i++) {
+			new_str[i] = str_builder.str[i];
+		}
+		str_builder.str = new_str;
+		str_builder.capacity = new_capacity;
+		free(to_free);
+	}
+	// append char
+	*(str_builder.str + str_builder.size) = c;
+	*(str_builder.str + (str_builder.size + 1)) = '\0';
 	// update size
 	str_builder.size += 1;
-	// update str
-	str_builder.str = new_str;
-	// free old_str
-	free(old_str);
 }
 
 void append_str(char* str)
 {
-	for (int i = 0; i < strlen(str); i++) {
-		str_builder.append_char(*(str + i));
+	int i = 0;
+	while (str[i] != '\0') {
+		str_builder.append_char(*(str + i++));
 	}
 }
 
@@ -106,12 +116,11 @@ void int_to_string(int32_t n) {
 
 void clear(void)
 {
+	for (int i = 0; i < str_builder.size; i++) *(str_builder.str + i) = '\0';
 	str_builder.size = 0;
-	str_builder.str = (char *)malloc(sizeof(char) * 0);
-	*str_builder.str = '\0';
 }
 void clear_res(void)
 {
 	str_builder.res_size = 0;
-	for (int i = 0; i < 16; i++) *(str_builder.res + i) = '\0';
+	for (int i = 0; i < RES_DEFAUT_SIZE; i++) *(str_builder.res + i) = '\0';
 }

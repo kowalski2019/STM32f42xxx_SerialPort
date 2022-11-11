@@ -12,11 +12,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define STR_DEFAULT_SIZE	10
+#define RES_DEFAUT_SIZE		16
+
 typedef struct  {
 	uint64_t size;
 	uint64_t res_size;
+	uint64_t capacity;
 	char *str;
-	char res[16]; // for conversion , int to string
+	char res[RES_DEFAUT_SIZE]; // for conversion , int to string
 	void (*prepend_char)(char);
 	void (*append_char)(char);
 	void (*append_str)(char *);
