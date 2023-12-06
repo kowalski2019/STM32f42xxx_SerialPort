@@ -5,20 +5,20 @@
  * @author		Claude Stephane M. Kouame; claude.kouame@csmk59.de
  * @version 	V1.0
  * @date		2021.7.15
- * @brief  	Module for using the UART/USART on the waveshare-board.
+ * @brief  		Module for using the UART/USART on the waveshare-board.
  ******************************************************************************
  */
 
 /* Includes */
+#include <string.h>
 
 #include "serial_port.h"
-#include <string.h>
 #include "lib/string_builder.h"
 
 static UART_HandleTypeDef uart1;
 static GPIO_InitTypeDef gpio_init_struct;
 
-static void SERIAL_PORT_GPIO_Init(void)
+static void Serial_Port_GPIO_Init(void)
 {
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 
@@ -31,7 +31,7 @@ static void SERIAL_PORT_GPIO_Init(void)
 	HAL_GPIO_Init(GPIOA, &gpio_init_struct);
 }
 
-static void SERIAL_PORT_UART_Init(void)
+static void Serial_Port_UART_Init(void)
 {
 	__HAL_RCC_USART1_CLK_ENABLE();
 
@@ -50,17 +50,28 @@ static void SERIAL_PORT_UART_Init(void)
 /**
  *
  */
-void SERIAL_PORT_Init(void)
+void Serial_Port_Init(void)
 {
-	SERIAL_PORT_GPIO_Init();
-	SERIAL_PORT_UART_Init();
-	string_builder_init();
+	Serial_Port_GPIO_Init();
+	Serial_Port_UART_Init();
+	String_Builder_Init();
+}
+
+/**
+ * @brief Redefine the _write function
+ *
+ */
+int _write(int file, char *ptr, int len)
+{
+  HAL_UART_Transmit(&uart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+
+  return len;
 }
 
 /**
  *
  */
-void serial_port_println(char *data)
+void Serial_Port_Println(char *data)
 {
 	char *next_line = "\n\r";
 	HAL_UART_Transmit(&uart1, (uint8_t *)data, strlen(data), HAL_MAX_DELAY);
@@ -70,25 +81,25 @@ void serial_port_println(char *data)
 /**
  *
  */
-void serial_port_write_int(int32_t num)
+void Serial_Port_Write_Int(int32_t num)
 {
-	str_builder.int_to_string(num);
-	serial_port_print(str_builder.res);
+	mStrBuildBuffer.String_Builder_Int_To_String(num);
+	Serial_Port_Print(mStrBuildBuffer.res);
 }
 
-void serial_port_print(char *data)
+void Serial_Port_Print(char *data)
 {
 	HAL_UART_Transmit(&uart1, (uint8_t *)data, strlen(data), HAL_MAX_DELAY);
 }
 
-void test_serial_port(void)
+void Serial_Port_Test(void)
 {
-	SERIAL_PORT_Init();
+	Serial_Port_Init();
 
 	while (1)
 	{
-		serial_port_print("Hello world");
-		serial_port_println("");
+		Serial_Port_Print("Hello world");
+		Serial_Port_Println("");
 		HAL_Delay(1000);
 	}
 }
