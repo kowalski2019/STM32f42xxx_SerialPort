@@ -10,88 +10,88 @@
 
 #include "string_builder.h"
 
-string_builder_t str_builder;
+String_Builder_t mStrBuildBuffer;
 
-void string_builder_init(void)
+void String_Builder_Init(void)
 {
-	clear();
-	str_builder.size = 0;
-	str_builder.res_size = 0;
-	str_builder.str = (char *)malloc(sizeof(char) * STR_DEFAULT_SIZE);
-	str_builder.capacity = STR_DEFAULT_SIZE;
-	str_builder.prepend_char = &prepend_char;
-	str_builder.append_char = &append_char;
-	str_builder.append_str = &append_str;
-	str_builder.char_at = &char_at;
-	str_builder.clear = &clear;
-	str_builder.clear_res = &clear_res;
-	str_builder.int_to_string = &int_to_string;
+	String_Builder_Clear();
+	mStrBuildBuffer.size = 0;
+	mStrBuildBuffer.res_size = 0;
+	mStrBuildBuffer.str = (char *)malloc(sizeof(char) * STR_DEFAULT_SIZE);
+	mStrBuildBuffer.capacity = STR_DEFAULT_SIZE;
+	mStrBuildBuffer.String_Builder_Prepend_Char = &String_Builder_Prepend_Char;
+	mStrBuildBuffer.String_Builder_Append_Char = &String_Builder_Append_Char;
+	mStrBuildBuffer.String_Builder_Append_Str = &String_Builder_Append_Str;
+	mStrBuildBuffer.String_Builder_Char_At = &String_Builder_Char_At;
+	mStrBuildBuffer.String_Builder_Clear = &String_Builder_Clear;
+	mStrBuildBuffer.String_Builder_Clear_Res = &String_Builder_Clear_Res;
+	mStrBuildBuffer.String_Builder_Int_To_String = &String_Builder_Int_To_String;
 }
 
-void prepend_char(char c)
+void String_Builder_Prepend_Char(char c)
 {
-	int i = str_builder.res_size;
+	int i = mStrBuildBuffer.res_size;
 	while (i > 0)
 	{
-		*(str_builder.res + i) = *(str_builder.res + (i - 1));
+		*(mStrBuildBuffer.res + i) = *(mStrBuildBuffer.res + (i - 1));
 		i -= 1;
 	}
-	*(str_builder.res) = c;
+	*(mStrBuildBuffer.res) = c;
 	// update size
-	str_builder.res_size += 1;
+	mStrBuildBuffer.res_size += 1;
 }
 
-void append_char(char c)
+void String_Builder_Append_Char(char c)
 {
 
-	if (str_builder.size + 1 >= str_builder.capacity)
+	if (mStrBuildBuffer.size + 1 >= mStrBuildBuffer.capacity)
 	{
-		char *to_free = str_builder.str;
+		char *to_free = mStrBuildBuffer.str;
 		// increase str capacity
-		uint64_t new_capacity = str_builder.capacity * str_builder.capacity;
+		uint64_t new_capacity = mStrBuildBuffer.capacity * mStrBuildBuffer.capacity;
 		char *new_str = (char *)malloc(sizeof(char) * new_capacity);
 		// TODO check malloc result!
-		for (int i = 0; i < str_builder.size; i++)
+		for (int i = 0; i < mStrBuildBuffer.size; i++)
 		{
-			new_str[i] = str_builder.str[i];
+			new_str[i] = mStrBuildBuffer.str[i];
 		}
-		str_builder.str = new_str;
-		str_builder.capacity = new_capacity;
+		mStrBuildBuffer.str = new_str;
+		mStrBuildBuffer.capacity = new_capacity;
 		free(to_free);
 	}
 	// append char
-	*(str_builder.str + str_builder.size) = c;
-	*(str_builder.str + (str_builder.size + 1)) = '\0';
+	*(mStrBuildBuffer.str + mStrBuildBuffer.size) = c;
+	*(mStrBuildBuffer.str + (mStrBuildBuffer.size + 1)) = '\0';
 	// update size
-	str_builder.size += 1;
+	mStrBuildBuffer.size += 1;
 }
 
-void append_str(char *str)
+void String_Builder_Append_Str(char *str)
 {
 	int i = 0;
 	while (str[i] != '\0')
 	{
-		str_builder.append_char(*(str + i++));
+		mStrBuildBuffer.String_Builder_Append_Char(*(str + i++));
 	}
 }
 
-char char_at(uint16_t index)
+char String_Builder_Char_At(uint16_t index)
 {
-	if (index < str_builder.size && index > -1)
+	if (index < mStrBuildBuffer.size && index > -1)
 	{
-		return *(str_builder.str + index);
+		return *(mStrBuildBuffer.str + index);
 	}
 	return '\0';
 }
 
-char digit_to_char(uint32_t n)
+char String_Builder_Digit_To_Char(uint32_t n)
 {
 	return (char)('0' + n);
 }
 
-void int_to_string(int32_t n)
+void String_Builder_Int_To_String(int32_t n)
 {
-	str_builder.clear_res();
+	mStrBuildBuffer.String_Builder_Clear_Res();
 	uint8_t neg_flag = 0;
 	if (n < 0)
 	{
@@ -100,7 +100,7 @@ void int_to_string(int32_t n)
 	}
 	else if (n == 0)
 	{
-		str_builder.prepend_char(digit_to_char(n));
+		mStrBuildBuffer.String_Builder_Prepend_Char(String_Builder_Digit_To_Char(n));
 	}
 	else
 	{
@@ -108,23 +108,23 @@ void int_to_string(int32_t n)
 		{
 
 			uint32_t num = n % 10;
-			str_builder.prepend_char(digit_to_char(num));
+			mStrBuildBuffer.String_Builder_Prepend_Char(String_Builder_Digit_To_Char(num));
 			n /= 10;
 		}
 	}
 	if (neg_flag)
-		str_builder.prepend_char('-');
+		mStrBuildBuffer.String_Builder_Prepend_Char('-');
 }
 
-void clear(void)
+void String_Builder_Clear(void)
 {
-	for (int i = 0; i < str_builder.size; i++)
-		*(str_builder.str + i) = '\0';
-	str_builder.size = 0;
+	for (int i = 0; i < mStrBuildBuffer.size; i++)
+		*(mStrBuildBuffer.str + i) = '\0';
+	mStrBuildBuffer.size = 0;
 }
-void clear_res(void)
+void String_Builder_Clear_Res(void)
 {
-	str_builder.res_size = 0;
+	mStrBuildBuffer.res_size = 0;
 	for (int i = 0; i < RES_DEFAUT_SIZE; i++)
-		*(str_builder.res + i) = '\0';
+		*(mStrBuildBuffer.res + i) = '\0';
 }

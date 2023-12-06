@@ -25,27 +25,27 @@ typedef struct
 	uint64_t capacity;
 	char *str;
 	char res[RES_DEFAUT_SIZE]; // for conversion , int to string
-	void (*prepend_char)(char);
-	void (*append_char)(char);
-	void (*append_str)(char *);
-	char (*char_at)(uint16_t index);
-	void (*clear)(void);
-	void (*clear_res)(void);
-	void (*int_to_string)(int32_t);
+	void (*String_Builder_Prepend_Char)(char);
+	void (*String_Builder_Append_Char)(char);
+	void (*String_Builder_Append_Str)(char *);
+	char (*String_Builder_Char_At)(uint16_t index);
+	void (*String_Builder_Clear)(void);
+	void (*String_Builder_Clear_Res)(void);
+	void (*String_Builder_Int_To_String)(int32_t);
 
-} string_builder_t;
+} String_Builder_t;
 
-void string_builder_init(void);
-void append_char(char);
-void prepend_char(char);
-void append_str(char *);
-char char_at(uint16_t index);
-int32_t to_int(void);
-char digit_to_char(uint32_t n);
-void int_to_string(int32_t n);
-void clear(void);
-void clear_res(void);
+void String_Builder_Init(void);
+void String_Builder_Append_Char(char);
+void String_Builder_Prepend_Char(char);
+void String_Builder_Append_Str(char *);
+char String_Builder_Char_At(uint16_t index);
+int32_t String_Builder_To_Int(void);
+char String_Builder_Digit_To_Char(uint32_t n);
+void String_Builder_Int_To_String(int32_t n);
+void String_Builder_Clear(void);
+void String_Builder_Clear_Res(void);
 
-extern string_builder_t str_builder;
+extern String_Builder_t mStrBuildBuffer;
 
 #endif /* UTILS_STRING_BUILDER_H_ */
