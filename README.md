@@ -2,8 +2,12 @@
 
 ## How to use it ?
 
+Just use the stdio function **printf(char* format, ...)**.
+Or use the embedded function like **Serial_Port_Println(char *str)** etc...
 
-The first step is of course to initialise the device by calling the function **SERIAL_PORT_Init()**. After this step you can of course move on to a possible visualisation.
+## How to vizualise the outputed string
+
+The first step is of course to initialise the device by calling the function **Serial_Port_Init()**. After this step you can of course move on to a possible visualisation.
 
 To see the values that are sent via SPI to the **VCP** (**V**irtual **C**OM **P**ort)
 you kann use **PuTTY** on Windows and **screen** on Linux.
